@@ -3,7 +3,7 @@ import GoogleProvider from "next-auth/providers/google";
 import User from "@models/user";
 import { connectToDB } from "@utils/database";
 
-const handle = NextAuth({
+const handler = NextAuth({
   providers: [
     GoogleProvider({
       clientId: process.env.GOOGLE_ID,
@@ -41,11 +41,11 @@ const handle = NextAuth({
                 
                 return true;
             } catch (error) {
-                console.log(error);
+                console.log("Error checking if user exits.",error.message)
                 return false;
             }
         },
     }
 });
 
-export { handle as GET, handle as POST };
+export { handler as GET, handler as POST };
