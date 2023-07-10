@@ -10,42 +10,41 @@ const handler = NextAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET,
     }),
   ],
-  callbacks:{
+  callbacks: {
+    async session({ session }) {
+      const sessionUser = await User.findOne({
+        email: session.user.email,
+      });
 
-      async session({ session }) {
-          const sessionUser = await User.findOne({
-              email:session.user.email
-            })
-            
-            session.user.id = sessionUser._id.toString()
-            return session
-        },
-        
-        async signIn({ profile }) {
-            try {
-                await connectToDB();
-                
-                // check if user already exits
-                const userExits = await User.findOne({
-                    email: profile.email
-                })
-                
-                // if not, create a new user
-                if(!userExits){
-                    await User.create({
-                        email: profile.email,
-                        username:profile.name.replace(" ","").toLowerCase(),
-                        image: profile.picture
-                    })
-                }
-                
-                return true;
-            } catch (error) {
-                console.log("Error checking if user exits.",error.message)
-                return false;
-            }
-        },
-    }
+      session.user.id = sessionUser._id.toString();
+      return session;
+    },
+
+    async signIn({ profile }) {
+      try {
+        await connectToDB();
+
+        // check if user already exits
+        const userExits = await User.findOne({
+          email: profile.email,
+        });
+
+        // if not, create a new user
+        if (!userExits) {
+          await User.create({
+            email: profile.email,
+            username: profile.name.replace(" ", "").toLowerCase(),
+            image: profile.picture,
+          });
+        }
+
+        return true;
+      } catch (error) {
+        console.log("Error checking if user exits.", error.message);
+        return false;
+      }
+    },
+  },
 });
 
 export { handler as GET, handler as POST };
