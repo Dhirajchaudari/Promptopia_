@@ -7,10 +7,10 @@ import { signIn, signOut, useSession, getProviders } from "next-auth/react";
 
 const Nav = () => {
   // const isUserLoggedIn = true;
-  const {data: session} = useSession()
+  const { data: session } = useSession()
   const [providers, setProviders] = useState(null);
   const [toggleDropDown, setToggleDropdown] = useState(false);
-  
+
   useEffect(() => {
     (async () => {
       const res = await getProviders();
@@ -39,7 +39,7 @@ const Nav = () => {
             <button type="button" onClick={signOut} className="outline_btn">
               Sign Out
             </button>
-            <Link href="/profile">
+            <Link href={`/profile`}>
               <Image
                 src={session?.user.image}
                 width={37}
@@ -82,7 +82,7 @@ const Nav = () => {
             {toggleDropDown && (
               <div className="dropdown">
                 <Link
-                  href="/profile"
+                  href={`/profile`}
                   className="dropdown_link"
                   onClick={() => setToggleDropdown(false)}
                 >
