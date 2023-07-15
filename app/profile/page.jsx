@@ -18,6 +18,7 @@ const MyProfile = () => {
     }
     if (session?.user.id) fetchPosts()
   }, [session?.user.id])
+  // this session?.user.id in the dependency array does the trick. Don't remove it
 
   const handleEdit = (post) => {
     router.push(`/update-prompt?id=${post._id}`)
